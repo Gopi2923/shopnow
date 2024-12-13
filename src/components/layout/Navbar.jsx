@@ -9,9 +9,17 @@ import {
   Search, 
   Heart 
 } from 'lucide-react';
+import { CartSidebar } from './CartSidebar';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const cartItemCount = 2; // You can replace this with actual cart item count logic
+
+  const toggleCartSidebar = () => {
+    setIsCartOpen(!isCartOpen);
+  };
 
   const navItems = [
     { 
@@ -88,12 +96,23 @@ export default function Navbar() {
             <Link href="/login" className="hover:text-blue-600">
               <User />
             </Link>
-            <Link href="/cart" className="relative hover:text-blue-600">
-              <ShoppingCart />
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                0
-              </span>
-            </Link>
+            <div className="flex items-center">
+        <button 
+          onClick={toggleCartSidebar} 
+          className="relative hover:text-blue-600"
+        >
+          <ShoppingCart />
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+            {cartItemCount}
+          </span>
+        </button>
+      </div>
+
+      {/* Cart Sidebar */}
+      <CartSidebar 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+      />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 import { products, categories } from '@/data/products';
-import { Product } from '@/data/products';
+import BannerCarousel from '@/components/BannerCarousel';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -30,6 +30,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* <BannerCarousel /> */}
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg mb-12 p-12 text-center">
         <h1 className="text-4xl font-bold mb-4">Winter Collection 2024</h1>
