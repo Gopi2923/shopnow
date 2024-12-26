@@ -1,7 +1,25 @@
+'use client'
+
 import React from 'react';
 import { Package, CreditCard, MapPin } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 const CheckoutPage = () => {
+  const { cartItems } = useCart();
+  
+  // Calculate subtotal
+  const subtotal = cartItems.reduce((acc, item) => 
+    acc + (item.price * item.quantity), 0);
+  
+  // Calculate shipping and tax
+  const shipping = 5.99;
+  const taxRate = 0.08; // 8% tax rate
+  const tax = subtotal * taxRate;
+  
+  // Calculate total
+  const total = subtotal + shipping + tax;
+
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden">
@@ -78,40 +96,51 @@ const CheckoutPage = () => {
             </div>
 
             {/* Cart Items */}
-            <div className="space-y-4 mb-6">
-              <div className="flex justify-between items-center border-b pb-4">
-                <div className="flex items-center">
-                  <img 
-                    src="/images/products/woman-hand-with-clutch-bag.jpg" 
-                    alt="Product" 
-                    className="w-16 h-16 rounded-md mr-4 object-cover"
-                  />
-                  <div>
-                    <p className="font-medium text-gray-800">Minimalist Leather Wallet</p>
-                    <p className="text-sm text-gray-500">Quantity: 1</p>
+            <div className="space-y-4 mb-6 max-h-96 overflow-y-auto">
+              {cartItems.map((item) => (
+                <div key={`${item.id}-${item.selectedSize}-${item.selectedColor}`} 
+                     className="flex justify-between items-center border-b pb-4">
+                  <div className="flex items-center">
+                    <div className="relative w-16 h-16 mr-4">
+                      <Image 
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover rounded-md"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-medium text-gray-800">{item.name}</p>
+                      <p className="text-sm text-gray-500">
+                        Size: {item.selectedSize}, Color: {item.selectedColor}
+                      </p>
+                      <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
+                    </div>
                   </div>
+                  <span className="font-semibold text-gray-800">
+                    ${(item.price * item.quantity).toFixed(2)}
+                  </span>
                 </div>
-                <span className="font-semibold text-gray-800">$99.99</span>
-              </div>
+              ))}
             </div>
 
             {/* Price Breakdown */}
             <div className="space-y-4 mb-6">
               <div className="flex justify-between text-gray-700">
                 <span>Subtotal</span>
-                <span>$99.99</span>
+                <span>${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
                 <span>Shipping</span>
-                <span>$5.99</span>
+                <span>${shipping.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-gray-700">
-                <span>Tax</span>
-                <span>$8.00</span>
+                <span>Tax (8%)</span>
+                <span>${tax.toFixed(2)}</span>
               </div>
               <div className="border-t pt-4 flex justify-between font-bold text-xl text-gray-900">
                 <span>Total</span>
-                <span>$113.98</span>
+                <span>${total.toFixed(2)}</span>
               </div>
             </div>
 

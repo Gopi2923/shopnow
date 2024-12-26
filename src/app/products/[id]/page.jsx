@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { Star, ShoppingCart, Heart, ArrowLeft } from 'lucide-react';
 import { products } from '@/data/products';
+import { useCart } from '@/context/CartContext';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function ProductDetailsPage() {
   const params = useParams();
@@ -22,24 +24,46 @@ export default function ProductDetailsPage() {
     return <div className="container mx-auto p-4">Product not found</div>;
   }
 
+  // const handleAddToCart = () => {
+  //   if (!selectedSize || !selectedColor) {
+  //     alert('Please select size and color');
+  //     return;
+  //   }
+
+  //   // Implement add to cart logic
+  //   console.log('Added to cart', {
+  //     ...product,
+  //     selectedSize,
+  //     selectedColor,
+  //     quantity
+  //   });
+  // };
+
+  const { addToCart } = useCart();
+
   const handleAddToCart = () => {
     if (!selectedSize || !selectedColor) {
       alert('Please select size and color');
       return;
     }
 
-    // Implement add to cart logic
-    console.log('Added to cart', {
-      ...product,
-      selectedSize,
-      selectedColor,
-      quantity
+    addToCart(product, selectedSize, selectedColor, quantity);
+    toast.success('Added to cart successfully!', {
+      duration: 2000,
+      position: 'top-right',
+      style: {
+        background: '#4CAF50',
+        color: '#fff',
+        padding: '16px',
+      },
+      icon: '🛍️',
     });
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Navigation and Wishlist */}
+      <Toaster />
       <div className="flex justify-between items-center mb-6">
         <button 
           onClick={() => router.back()}

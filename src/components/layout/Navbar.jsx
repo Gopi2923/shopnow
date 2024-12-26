@@ -10,12 +10,17 @@ import {
   Heart 
 } from 'lucide-react';
 import { CartSidebar } from './CartSidebar';
+import { useCart } from '@/context/CartContext';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const cartItemCount = 2; // You can replace this with actual cart item count logic
+
+   // Get cartItems from CartContext
+   const { cartItems } = useCart();
+ 
+   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const toggleCartSidebar = () => {
     setIsCartOpen(!isCartOpen);
@@ -102,9 +107,11 @@ export default function Navbar() {
           className="relative hover:text-blue-600"
         >
           <ShoppingCart />
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-            {cartItemCount}
-          </span>
+          {cartItemCount > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {cartItemCount}
+            </span>
+          )}
         </button>
       </div>
 

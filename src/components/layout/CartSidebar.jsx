@@ -1,48 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trash2 } from 'lucide-react';
 import Link from 'next/link';
-
-// Sample cart items (you'll replace this with actual cart state)
-const initialCartItems = [
-  {
-    id: 1,
-    name: 'Vintage Denim Jacket',
-    price: 129.99,
-    quantity: 1,
-    image: '/images/products/young-woman-wearing-jacket-walking-outside.jpg'
-  },
-  {
-    id: 2,
-    name: 'Leather Sneakers',
-    price: 199.50,
-    quantity: 2,
-    image: '/images/products/men-shoes.jpg'
-  }
-];
+import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 export function CartSidebar({ isOpen, onClose }) {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   // Calculate total
   const total = cartItems.reduce((acc, item) => 
     acc + (item.price * item.quantity), 0);
-
-  // Remove item from cart
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
-  };
-
-  // Update quantity
-  const updateQuantity = (id, newQuantity) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id 
-        ? { ...item, quantity: Math.max(1, newQuantity) }
-        : item
-    ));
-  };
 
   return (
     <AnimatePresence>
@@ -85,15 +55,16 @@ export function CartSidebar({ isOpen, onClose }) {
               <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div 
-                    key={item.id} 
+                    key={`${item.id}-${item.selectedSize}-${item.selectedColor}`}
                     className="flex items-center border-b pb-4"
                   >
                     {/* Product Image */}
-                    <div className="w-20 h-20 mr-4 bg-gray-100 flex items-center justify-center">
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="max-w-full max-h-full object-cover"
+                    <div className="relative w-20 h-20 mr-4">
+                      <Image 
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="object-cover"
                       />
                     </div>
 
@@ -101,6 +72,9 @@ export function CartSidebar({ isOpen, onClose }) {
                     <div className="flex-grow">
                       <h3 className="font-semibold">{item.name}</h3>
                       <p className="text-gray-600">${item.price.toFixed(2)}</p>
+                      <p className="text-sm text-gray-500">
+                        Size: {item.selectedSize}, Color: {item.selectedColor}
+                      </p>
                       
                       {/* Quantity Control */}
                       <div className="flex items-center mt-2">
@@ -122,7 +96,7 @@ export function CartSidebar({ isOpen, onClose }) {
 
                     {/* Remove Button */}
                     <button 
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <Trash2 size={20} />
@@ -139,13 +113,13 @@ export function CartSidebar({ isOpen, onClose }) {
                   <span className="font-bold">Total</span>
                   <span className="font-bold">${total.toFixed(2)}</span>
                 </div>
-            <Link href='/checkout' onClick={onClose}>
-                <button 
-                  className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition"
-                >
-                  Proceed to Checkout
-                </button>
-            </Link>
+                <Link href='/checkout' onClick={onClose}>
+                  <button 
+                    className="w-full bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition"
+                  >
+                    Proceed to Checkout
+                  </button>
+                </Link>
               </div>
             )}
           </motion.div>
@@ -154,4 +128,3 @@ export function CartSidebar({ isOpen, onClose }) {
     </AnimatePresence>
   );
 }
-

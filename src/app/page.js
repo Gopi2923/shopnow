@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 import { products, categories } from '@/data/products';
-import BannerCarousel from '@/components/BannerCarousel';
 
 export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -77,36 +76,6 @@ export default function Home() {
           />
         ))}
       </div>
-
-      {/* Cart Preview */}
-      {cart.length > 0 && (
-        <div className="fixed bottom-4 right-4 bg-white shadow-lg rounded-lg p-4 w-72">
-          <h3 className="text-xl font-bold mb-4">Cart ({cart.length})</h3>
-          {cart.map(item => (
-            <div 
-              key={item.id} 
-              className="flex justify-between items-center border-b py-2"
-            >
-              <span>{item.name}</span>
-              <span>
-                Qty: {item.quantity || 1} - 
-                ${((item.quantity || 1) * item.price).toFixed(2)}
-              </span>
-            </div>
-          ))}
-          <div className="mt-4 flex justify-between font-bold">
-            <span>Total:</span>
-            <span>
-              ${cart.reduce((total, item) => 
-                total + (item.price * (item.quantity || 1)), 0
-              ).toFixed(2)}
-            </span>
-          </div>
-          <button className="w-full bg-blue-500 text-white py-2 rounded mt-4 hover:bg-blue-600">
-            Checkout
-          </button>
-        </div>
-      )}
     </div>
   );
 }
