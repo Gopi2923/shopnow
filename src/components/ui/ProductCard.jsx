@@ -4,13 +4,19 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ShoppingCart, Heart } from 'lucide-react';
+import { useWishlist } from '@/context/WishlistContext';
 
 export default function ProductCard({ product, onAddToCart }) {
-  const [isWishlist, setIsWishlist] = useState(false);
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isWishlisted = isInWishlist(product.id);
 
   const handleWishlistClick = (e) => {
     e.stopPropagation(); // Prevent navigating to product details
-    setIsWishlist(!isWishlist);
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
   };
 
   return (
@@ -20,10 +26,10 @@ export default function ProductCard({ product, onAddToCart }) {
         <button 
           onClick={handleWishlistClick}
           className={`absolute top-4 right-4 z-10 ${
-            isWishlist ? 'text-red-500' : 'text-gray-300'
+            isWishlisted ? 'text-red-500' : 'text-gray-300'
           } hover:text-red-500`}
         >
-          <Heart fill={isWishlist ? 'currentColor' : 'transparent'} />
+          <Heart fill={isWishlisted ? 'currentColor' : 'transparent'} />
         </button>
         <Link href={`/products/${product.id}`}>
         {/* Product Image */}
