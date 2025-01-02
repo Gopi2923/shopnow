@@ -95,9 +95,9 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold text-center mb-12">Our Leadership Team</h2>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: 'John Doe', role: 'CEO & Founder', image: '/api/placeholder/400/400' },
-              { name: 'Jane Smith', role: 'Head of Design', image: '/api/placeholder/400/400' },
-              { name: 'Mike Johnson', role: 'Technical Director', image: '/api/placeholder/400/400' },
+              { name: 'John Doe', role: 'CEO & Founder', image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a' },
+              { name: 'Jane Smith', role: 'Head of Design', image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2' },
+              { name: 'Mike Johnson', role: 'Technical Director', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e' },
             ].map((member, index) => (
               <div key={index} className="text-center">
                 <div className="relative w-48 h-48 mx-auto mb-4">
